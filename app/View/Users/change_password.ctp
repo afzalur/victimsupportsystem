@@ -16,27 +16,17 @@
 				?>
 					<fieldset>
 					<?php
-						echo $this->Form->input(
-							'user_type',
-							array(
-								'options' => 
-								array(
-									'Super Admin' => 'Super Admin',
-									'Admin' => 'Admin',
-									'General' => 'General'
-									)
-								)
-						);
-						echo $this->Form->input('username');
-						echo $this->Form->input('email');
-						echo $this->Form->input('password');
-						echo $this->Form->input('retype_password');
-					?>
+		                echo $this->Form->input('_id');
+		                echo $this->Form->input('username',array('readonly'=>'readonly'));
+		                echo $this->Form->input('email',array('readonly'=>'readonly'));
+		                echo $this->Form->input('password',array('value'=>''));
+		                echo $this->Form->input('retype_password',array('type'=>'password', 'value'=>''));
+			        ?>
 					</fieldset>
 					<fieldset>
 						<div class="control-group">
 		                    <div class="controls">
-		                        <?php   echo $this->Form->button('Create User',array('class'=>'btn btn-success input-xlarge')); ?>
+		                        <?php   echo $this->Form->button('Change Password',array('class'=>'btn btn-success input-xlarge')); ?>
 		                    </div>
 		                </div>
 					</fieldset>

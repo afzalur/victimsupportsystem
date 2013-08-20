@@ -16,6 +16,8 @@
 				?>
 					<fieldset>
 					<?php
+						echo $this->Form->input('_id');
+						echo $this->Form->input('username');
 						echo $this->Form->input(
 							'user_type',
 							array(
@@ -27,16 +29,12 @@
 									)
 								)
 						);
-						echo $this->Form->input('username');
-						echo $this->Form->input('email');
-						echo $this->Form->input('password');
-						echo $this->Form->input('retype_password');
 					?>
 					</fieldset>
 					<fieldset>
 						<div class="control-group">
 		                    <div class="controls">
-		                        <?php   echo $this->Form->button('Create User',array('class'=>'btn btn-success input-xlarge')); ?>
+		                        <?php   echo $this->Form->button('Update User',array('class'=>'btn btn-success input-xlarge')); ?>
 		                    </div>
 		                </div>
 					</fieldset>

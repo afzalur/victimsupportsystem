@@ -1,0 +1,22 @@
+/* 
+    Document   : my_style
+    Created on : Jul 22, 2013, 17:11:59 AM
+    Author     : Tahsin Rahit
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+/**********************************************/
+/************** List View *********************/
+/**********************************************/
+
+.actions ul li{
+    padding:3px 0px 3px 22px;
+    list-style-type: none;
+}
+.actions ul li a{
+    font-weight: normal;
+    display: block;
+    clear: both;
+}

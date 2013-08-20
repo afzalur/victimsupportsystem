@@ -1,14 +1,4 @@
-<?php
-/*********************************************************************
- * Copyright (C) 2013 TerraTech Limited (www.terratech.com.bd)
- *
- * This file is part of victimDb project.
- *
- * victimDb can not be copied and/or distributed without the express
- * permission of TerraTech Limited
-**********************************************************************/
 
-?>
 
 <!-- FACEBOOK LOGIN -->
 <div id="fb-root"></div>
@@ -55,7 +45,7 @@ function signinCallback(authResult) {
 
 
 
-<form action="index.php" method="post">
+<?php echo $this->Form->create('User'); ?>
 
 	<h1 align="center" style="font-family:arial; color:#555">ADMIN PANEL</h1>		
 	
@@ -65,20 +55,18 @@ function signinCallback(authResult) {
 		<p></p>
 		<div class="field">
 			<label for="username">Email:</label>
-			<input type="text" id="username" name="login" value="" placeholder="Email" class="login username-field" />
+			<?php echo $this->Form->input('email', array('placeholder'=>'Email', 'class'=>'login username-field')); ?>
 		</div> <!-- /field -->
 		
 		<div class="field">
 			<label for="password">Password:</label>
-			<input type="password" id="password" name="pass" value="" placeholder="Password" class="login password-field"/>
+			<?php echo $this->Form->input('password',array('type'=>'password', 'placeholder'=>'Password', 'class'=>'login password-field')); ?>
 		</div> <!-- /password -->
 		
 	</div> <!-- /login-fields -->
 	
 	<div class="login-actions">		
-							
-		<button type="submit" name="submit" class="button btn btn-secondary btn-large">Sign In</button>
-		
+							<?php echo $this->Form->input('submit',array('type'=>'button', 'class'=>'button btn btn-secondary btn-large', 'label' => false)); ?>		
 	</div>
 	
 	<div style="width:; margin-top:3px; height:px;"></div>
@@ -102,7 +90,8 @@ function signinCallback(authResult) {
 	  </span>
 	</span>			
 
-</form>
+
+<?php echo $this->Form->end(); ?>	
 
 <!--
 <a href="#" onClick="disconnectUser()" >Revoke</a>

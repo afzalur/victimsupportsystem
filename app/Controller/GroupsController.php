@@ -1,14 +1,4 @@
 <?php
-
-/*********************************************************************
- * Copyright (C) 2013 TerraTech Limited (www.terratech.com.bd)
- *
- * This file is part of victimDb project.
- *
- * victimDb can not be copied and/or distributed without the express
- * permission of TerraTech Limited
-**********************************************************************/
-
 App::uses('AppController', 'Controller');
 /**
  * Users Controller
@@ -24,9 +14,8 @@ class GroupsController extends AppController {
  * @return void
  */
 	public function index() {
-
-	    $result = $this->Group->find('all');
-		$this->set(compact('result'));
+	    $groups = $this->Group->find('all');
+		$this->set(compact('groups'));
 	}
 
 	

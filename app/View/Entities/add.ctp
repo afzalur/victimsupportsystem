@@ -12,20 +12,20 @@
 			
 			<div class="widget-content">
 				
-						<?php   echo $this->Form->create('Group',array('class'=>'form-horizontal')); ?>
+						<?php   echo $this->Form->create('Entity',array('class'=>'form-horizontal')); ?>
 						<?php   $this->Form->victimDefaults(); ?>
 						<?php
 						//$this->Form->inputDefaults(array('error'=>array('attributes'=>array('class'=>'system negative'))));
 						?>
 							<fieldset>
 							<?php
-								echo $this->Form->input('name');
+								echo $this->Form->input('entity_name');
 							?>
 							</fieldset>
 							<fieldset>
 								<div class="control-group">
 				                    <div class="controls">
-				                        <?php   echo $this->Form->button('Create Group',array('class'=>'btn btn-success input-xlarge')); ?>
+				                        <?php   echo $this->Form->button('Create Entity',array('class'=>'btn btn-success input-xlarge')); ?>
 				                    </div>
 				                </div>
 							</fieldset>

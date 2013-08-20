@@ -1,14 +1,4 @@
 <?php
-
-/*********************************************************************
- * Copyright (C) 2013 TerraTech Limited (www.terratech.com.bd)
- *
- * This file is part of victimDb project.
- *
- * victimDb can not be copied and/or distributed without the express
- * permission of TerraTech Limited
-**********************************************************************/
-
 App::uses('AppController', 'Controller');
 /**
  * Users Controller
@@ -17,13 +7,13 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-    var $uses = array('User','Group');
+    var $uses = array('User');
     
     public function beforeFilter() {
         parent::beforeFilter();
 
-        $this->Auth->allow();
-        //$this->Security->unlockedActions = array('oauthlogin');
+        $this->Auth->allow(array('login', 'oauth2', 'logout', 'fb_channel', 'oauthlogin', 'revoke' ));
+
     }
     
 /**
@@ -33,10 +23,9 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index($type = null) {    
-        $userGroupID = $this->Group->findByName($type);
-        $conditions['conditions'] = (isset($userGroupID['Group']['_id'])) ? array( 'group_id' => $userGroupID['Group']['_id']) : false;
-        $users = $this->User->find( 'all', array($conditions));
-        $this->set(compact('users'));
+        $options = (!empty($type)) ? array('conditions' => array('user_type' => $type)) : null;
+        $users = $this->User->find( 'all', $options );
+        $this->set(compact('users','options'));
 	}    
 
         
@@ -52,6 +41,10 @@ public function login($vendor = null) {
     $this->layout = 'login';
     if($this->Auth->loggedIn()){
         $this->redirect($this->Auth->redirect());
+    }
+    if($this->Auth->login()) {
+        $this->Session->setFlash(__('You have successfully logged in.'), 'notices/success');
+        $this->redirect(array('controller'=>'users','action'=>'index'));
     }
 }
 
@@ -84,9 +77,8 @@ public function oauth2($vendor = null){
                     $this->set(compact('googleEmail','userData'));
                     $this->request->data['User']['username'] = $googleUserName;
                     $this->request->data['User']['email'] = $googleEmail;
-                    $adminID = $this->Group->findByName('Admin');
-                    $this->request->data['User']['group_id'] = $adminID['Group']['_id'];
                     $this->request->data['User']['vendor'] = 'google';
+                    $this->request->data['User']['user_type'] = 'General';
                     $this->request->data['User']['token'] = $accessToken;
                     $this->request->data['User']['password'] = $accessToken;
                     $this->request->data['User']['verified'] = 1;
@@ -97,10 +89,10 @@ public function oauth2($vendor = null){
                     }
                     else{
                         $conditions = array('email'=>$googleEmail,'username'=>$googleUserName);
-                        $field = array('token' => $accessToken, 'password' => AuthComponent::password($googleUserName));
+                        $field = array('token' => $accessToken, 'password' => AuthComponent::password($accessToken));
                         $this->User->updateAll($field,$conditions);
                     }
-                    $this->redirect(array('controller'=>'users','action'=>'oauthlogin',$googleEmail,$googleUserName));
+                    $this->redirect(array('controller'=>'users','action'=>'oauthlogin',$googleEmail,$accessToken));
 
                 }
             break;
@@ -121,8 +113,7 @@ public function oauth2($vendor = null){
                         }
                         $this->request->data['User']['username'] = $userData->username;
                         $this->request->data['User']['email'] = $userData->email;
-                        $adminID = $this->Group->findByName('Admin');
-                        $this->request->data['User']['group_id'] = $adminID['Group']['_id'];
+                        $this->request->data['User']['user_type'] = 'General';
                         $this->request->data['User']['vendor'] = 'fb';
                         $this->request->data['User']['token'] = $accessToken;
                         $this->request->data['User']['password'] = $accessToken;
@@ -134,42 +125,15 @@ public function oauth2($vendor = null){
                         }
                         else{
                             $conditions = array('email'=>$userData->email,'username'=>$userData->username);
-                            $field = array('token' => $accessToken, 'password' => AuthComponent::password($userData->username));
+                            $field = array('token' => $accessToken, 'password' => AuthComponent::password($accessToken));
                             $this->User->updateAll($field,$conditions);
                         }
-                        $this->redirect(array('controller'=>'users','action'=>'oauthlogin',$userData->email,$userData->username));
+                        $this->redirect(array('controller'=>'users','action'=>'oauthlogin',$userData->email,$accessToken));
                 
                 }
             break;
 
         default:
-            $superAdminID = $this->Group->findByName('Super Admin');
-            if($this->request->is('post') && $this->Auth->user('group_id') == $superAdminID['Group']['_id'] ){
-                $userEmailParts = explode("@", $this->request->data['User']['email']);
-                $this->request->data['User']['username'] = $userEmailParts[0];
-
-                $this->request->data['User']['verified'] = 1;
-
-                $result = $this->User->find('count',array('conditions'=> array('email'=>$this->request->data['User']['email']) ));
-
-                if( empty($result)){                    
-                    if($this->User->saveAll($this->request->data)){
-                        $this->Session->setFlash(__('user has been saved', true));
-                    }
-                    else{
-                        $this->Session->setFlash(__('Error occured while saving', true));
-                    }
-                }
-                else{
-                    $this->User->invalidate('User.email','user already exist with this email');
-                    $this->Session->setFlash(__('user already exist with this email', true));
-                }
-            }
-            elseif ($this->Auth->user('group_id') != $superAdminID ) {
-                $this->Session->setFlash(__('You are not authorized to complete this action', true));
-            }
-            $groups = $this->Group->find('list');
-            $this->set(compact('groups'));
             break;
     }
 
@@ -197,6 +161,124 @@ public function oauthlogin($email,$pass){
     }
     $this->redirect($this->Auth->redirect());
 }
+
+/**
+ * add method
+ *
+ * @return void
+ */
+        public function add() {
+            if($this->Auth->user('user_type') == 'Super Admin' ){
+                if ($this->request->is('post')) {
+                        $this->User->create();
+                        $this->request->data['User']['verified'] = 1;
+                        $result = null;
+                        $result = $this->User->find('first',array('conditions'=> array('email'=>$this->request->data['User']['email']) ));
+                        if($this->request->data['User']['password'] !== $this->request->data['User']['retype_password']){
+                            $this->User->validationErrors['retype_password'] = array('Password does not match');
+                            //$this->User->validationErrors = array( 'retype_password' => array("Password does not match"));
+                        }                                   
+                        if(!isset($this->request->data['User']['email']) || empty($this->request->data['User']['email'])){
+                            //$this->User->validationErrors = array( 'email' => array("email can not be empty"));
+                            $this->User->validationErrors['email'] = array('email can not be empty');
+                        }
+                        elseif (!empty($result)) { 
+                            $this->User->validationErrors['email'] = array('email already in use');
+                            //$this->User->validationErrors = array( 'email' => array("email already in use"));
+                        }
+                        else{                            
+                                $userEmailParts = explode("@", $this->request->data['User']['email']);
+                                $this->request->data['User']['username'] = $userEmailParts[0];
+                        }
+                        if( $this->User->validates($this->request->data) && $this->User->saveAll($this->request->data)) {
+                                $this->Session->setFlash(__('The user has been added.'),'notices/success');
+                                $this->redirect($this->referer());
+                        } else {
+                                $this->Session->setFlash(__('The user could not be saved. Please, try again.'),'notices/error');
+                        }
+                }
+            }
+            else{
+                $this->Session->setFlash(__('You are not authorized to complete this action'), 'notices/error');
+                $this->redirect($this->referer());
+            }
+        }
+
+
+        function change_password($id = NULL){            
+            if($this->Auth->user('user_type') != 'Super Admin'){
+                $id = $this->Auth->user('_id');
+            }
+            if (!$id && empty($this->request->data)) {
+                    $this->Session->setFlash(__('Invalid user'), 'notices/error');
+                    $this->redirect(array('action' => 'index'));
+            }
+            if (!empty($this->request->data)) {
+                    if($this->request->data['User']['password'] != $this->request->data['User']['retype_password']){
+                        $this->User->validationErrors['retype_password'] = array('Password does not match');
+                        //$this->Session->setFlash(__('password changed.'),'notices/success');
+                    }                           
+                    if( $this->User->validates($this->request->data) && $this->User->saveAll($this->request->data) ) {
+                        $this->Session->setFlash(__('password changed.'),'notices/success');
+                        //$this->redirect($this->referer());
+                    } else {
+                            $this->Session->setFlash(__('Password does not changed. Please, try again.'),'notices/error');
+                    }
+            }
+            if (empty($this->request->data)) {
+                    $this->request->data = $this->User->read(NULL, $id);
+            }
+        }
+
+/**
+ * edit method
+ * 
+ * Edit user
+ * 
+ * @return void
+ */
+        
+        function edit($id = null){
+            if($this->Auth->user('user_type') == 'Super Admin'){
+                if (!$this->User->exists($id)) {
+                        throw new NotFoundException(__('Invalid user'));
+                }
+                if ($this->request->is('post') || $this->request->is('put')) {
+                        if ($this->User->save($this->request->data)) {
+                                $this->Session->setFlash(__('The user has been saved'));
+                                $this->redirect(array('action' => 'index'));
+                        } else {
+                                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+                        }
+                } else {
+                        $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+                        $this->request->data = $this->User->find('first', $options);
+                }
+                $groups = $this->User->Group->find('list',array('fields'=>array('Group.id','Group.group_name')));
+                $this->set(compact('groups'));
+            }
+            else{
+                $this->Session->setFlash(__('You are not authorized to view that page', true));
+                $this->redirect($this->Auth->redirect());
+            }
+        }
+        
+
+/**
+ * view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+    public function view($id = null) {
+        if (!$this->User->exists($id)) {
+            throw new NotFoundException(__('Invalid user'));
+        }
+        $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+        $this->set('user', $this->User->find('first', $options));
+    }
+
         
 /**
  * logout method
@@ -224,8 +306,29 @@ public function oauthlogin($email,$pass){
         
         function revoke(){
             $this->layout = 'ajax';
-
+            //$this->redirect(array('controller'=>'users','action'=>'logout'));
         }
+
+/**
+ * delete method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+    public function delete($id = null) {
+        $this->User->id = $id;
+        if (!$this->User->exists()) {
+            throw new NotFoundException(__('Invalid user'));
+        }
+        $this->request->onlyAllow('post', 'delete');
+        if ($this->User->delete()) {
+            $this->Session->setFlash(__('User deleted'));
+            return $this->redirect(array('action' => 'index'));
+        }
+        $this->Session->setFlash(__('User was not deleted'));
+        return $this->redirect(array('action' => 'index'));
+    }
 
 
 }

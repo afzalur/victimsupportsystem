@@ -38,6 +38,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     		'slate',
     		'components/signin',
     		'slate-responsive',
+    		'custom-style',
     		)
     	);
 	//JS files
@@ -146,6 +147,20 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 				<li class="dropdown">					
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="icon-copy"></i>
+						Entity Data Management
+						<b class="caret"></b>
+					</a>					
+					
+					<ul class="dropdown-menu">
+						<li><?php echo $this->Html->link('Create Entity', array('controller' => 'entities', 'action' => 'add')); ?></li>
+						<li><?php echo $this->Html->link('Entity List', array('controller' => 'entities', 'action' => 'index')); ?></li>
+						<li><?php echo $this->Html->link('Add Field to an Entity', array('controller' => 'fields', 'action' => 'selectEntity')); ?></li>
+					</ul> 
+				</li>
+				
+				<li class="dropdown">					
+					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="icon-copy"></i>
 						Login Management
 						<b class="caret"></b>
 					</a>	
@@ -155,15 +170,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<li><a href="">Description</a></li>
 						<li><a href="">Help Desk</a></li>
 					</ul>    				
-				</li>
-				
-				<li class="dropdown">					
-					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<i class="icon-copy"></i>
-						Entity Data Management
-						<b class="caret"></b>
-					</a>					
-					
 				</li>
 				
 				<li class="dropdown">					
@@ -218,252 +224,25 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		<div class="row">
 			
 			
-		    <div class="span12">
+		
+			<div class="span8">
 				<?php echo $this->Session->flash(); ?>
-		    </div>
+				<?php echo $this->fetch('content'); ?>
+			</div>
+            <div class="span4">
+	      		<div class="widget hightlight">					
+					<div class="widget-content">
+                		<?php echo $this->fetch('sidebar'); ?>
+            		</div>
+        		</div>
+            </div>
 
-			<?php echo $this->fetch('content'); ?>
+
+		    	
+		    	
 		    
-		    <div class="span6">
-	      		
-	      		<div class="widget widget-table">
-					
-					<div class="widget-content">
-						
-						<table class="table table-bordered table-striped">
-					        <thead>
-					          <tr>
-					            <th>#</th>
-					            <th>First Name</th>
-					            <th>Last Name</th>
-					            <th>Username</th>
-					          </tr>
-					        </thead>
-					        <tbody>
-					          <tr>
-					            <td>1</td>
-					            <td>Michael</td>
-					            <td>Jordan</td>
-					            <td>@mjordan</td>
-					          </tr>
-					          <tr>
-					            <td>2</td>
-					            <td>Magic</td>
-					            <td>Johnson</td>
-					            <td>@mjohnson</td>
-					          </tr>
-					          <tr>
-					            <td>3</td>
-					            <td>Larry</td>
-					            <td>the Bird</td>
-					            <td>@twitter</td>
-					          </tr>
-					          <tr>
-					            <td>4</td>
-					            <td>Charles</td>
-					            <td>Barkley</td>
-					            <td>@cbark</td>
-					          </tr>
-					          <tr>
-					            <td>5</td>
-					            <td>Karl</td>
-					            <td>Malone</td>
-					            <td>@kmalone</td>
-					          </tr>
-					        </tbody>
-					      </table>
-						
-						
-					</div> <!-- /widget-content -->
-						
-				</div> <!-- /widget -->	
-						
-						
-				
-		    </div> <!-- /span6 -->
-		    
-		    
-		    
-		    <div class="span6">
-	      		
-	      		<div class="widget widget-table">
-					
-					<div class="widget-content">
-						
-						<table class="table table-bordered table-striped table-highlight">
-					        <thead>
-					          <tr>
-					            <th>#</th>
-					            <th>First Name</th>
-					            <th>Last Name</th>
-					            <th>Username</th>
-					          </tr>
-					        </thead>
-					        <tbody>
-					          <tr>
-					            <td>1</td>
-					            <td>Michael</td>
-					            <td>Jordan</td>
-					            <td>@mjordan</td>
-					          </tr>
-					          <tr>
-					            <td>2</td>
-					            <td>Magic</td>
-					            <td>Johnson</td>
-					            <td>@mjohnson</td>
-					          </tr>
-					          <tr>
-					            <td>3</td>
-					            <td>Larry</td>
-					            <td>the Bird</td>
-					            <td>@twitter</td>
-					          </tr>
-					          <tr>
-					            <td>4</td>
-					            <td>Charles</td>
-					            <td>Barkley</td>
-					            <td>@cbark</td>
-					          </tr>
-					          <tr>
-					            <td>5</td>
-					            <td>Karl</td>
-					            <td>Malone</td>
-					            <td>@kmalone</td>
-					          </tr>
-					        </tbody>
-					      </table>
-						
-						
-					</div> <!-- /widget-content -->
-						
-				</div> <!-- /widget -->	
-				
-		    </div> <!-- /span6 -->
-		    
-		    
-		    
-		    
-		    
-		    
-		    <div class="span12">
-	      		
-	      		<div class="widget widget-table">
-						
-					<div class="widget-header">						
-						<h3>
-							<i class="icon-th-list"></i>
-							Responsive Table 							
-						</h3>
-						<small>(Resize to view)</small>
-					</div> <!-- /widget-header -->
-					
-					<div class="widget-content">
-						
-						
-						
-						
-						<table class="table table-striped table-bordered responsive">
-							<thead>
-								<tr>
-									<th>Rendering engine</th>
-									<th>Browser</th>
-									<th>Platform(s)</th>
-									<th>Engine version</th>
-									<th>CSS grade</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="odd gradeX">
-									<td>Trident</td>
-									<td>Internet
-										 Explorer 4.0</td>
-									<td>Win 95+</td>
-									<td class="center"> 4</td>
-									<td class="center">X</td>
-								</tr>
-								<tr class="even gradeC">
-									<td>Trident</td>
-									<td>Internet
-										 Explorer 5.0</td>
-									<td>Win 95+</td>
-									<td class="center">5</td>
-									<td class="center">C</td>
-								</tr>
-								<tr class="odd gradeA">
-									<td>Trident</td>
-									<td>Internet
-										 Explorer 5.5</td>
-									<td>Win 95+</td>
-									<td class="center">5.5</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="even gradeA">
-									<td>Trident</td>
-									<td>Internet
-										 Explorer 6</td>
-									<td>Win 98+</td>
-									<td class="center">6</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Camino 1.0</td>
-									<td>OSX.2+</td>
-									<td class="center">1.8</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Camino 1.5</td>
-									<td>OSX.3+</td>
-									<td class="center">1.8</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Netscape 7.2</td>
-									<td>Win 95+ / Mac OS 8.6-9.2</td>
-									<td class="center">1.7</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Netscape Browser 8</td>
-									<td>Win 98SE+</td>
-									<td class="center">1.7</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Mozilla 1.6</td>
-									<td>Win 95+ / OSX.1+</td>
-									<td class="center">1.6</td>
-									<td class="center">A</td>
-								</tr>
-								<tr class="gradeA">
-									<td>Gecko</td>
-									<td>Mozilla 1.7</td>
-									<td>Win 98+ / OSX.1+</td>
-									<td class="center">1.7</td>
-									<td class="center">A</td>
-								</tr>
-								
-						
-							</tbody>
-						</table>
-						
-						
-					</div> <!-- /widget-content -->
-						
-				</div> <!-- /widget -->	
-				
-		    </div> <!-- /span12 -->
-		    
-		    
-		    
-		</div> <!-- /row -->
-		
-		
+		</div>  <!-- /.row -->  
+
 		
 		
 	</div> <!-- /.container -->
@@ -486,7 +265,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 
 </body>
-	<?php echo $this->element('sql_dump'); ?>
+	<?php //echo $this->element('sql_dump'); ?>
 </html>
 
 

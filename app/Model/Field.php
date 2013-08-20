@@ -3,14 +3,14 @@ App::uses('AppModel', 'Model');
 /**
  * User Model
  */
-class Group extends AppModel {
+class Field extends AppModel {
 
 /**
  * Display field
  *
  * @var string
  */
-	public $displayField = 'name';
+	public $displayField = 'field_name';
 
     public $primaryKey = '_id';
 
@@ -22,10 +22,10 @@ class Group extends AppModel {
  *
  * @var array
  */
-	public $hasMany = array(
-		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'group_id',
+	public $belongsTo = array(
+		'Entity' => array(
+			'className' => 'Entity',
+			'foreignKey' => 'entity_id',
 		)
 	);
 
