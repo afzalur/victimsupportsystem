@@ -21,10 +21,10 @@
 							<?php
 								echo $this->Form->input('entity_id',array('type'=>'hidden','value'=>$entity['Entity']['_id']));
 								echo $this->Form->input('entity_name',array('readonly'=>'readonly','value'=>$entity['Entity']['entity_name']));
-								//$i = 1;
-								//foreach ($fields as $field) {
-								//	echo $this->Form->input('existing field '.$i++,array('disabled'=>'disabled','value'=>$field));
-								//}
+								$i = 1;
+								foreach ($fields as $field) {
+									echo $this->Form->input('existing field '.$i++,array('disabled'=>'disabled','value'=>$field));
+								}
 
 								echo $this->Form->input('field_name');
 								echo $this->Form->input('field_type',array('options' => $types));
@@ -44,20 +44,21 @@
 			<thead>
 				<tr>
 					<th><?php echo __('Field Name'); ?></th>
-					<th><?php echo __('Field Type'); ?></th>
+					<th><?php echo __('Entity Name'); ?></th>
 					<th class="actions"><?php echo __('Actions'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
 				$i = 0;
-				foreach ($fields2 as $field2): ?>
+				foreach ($fields as $field): ?>
 					<tr>
-						<td><?php echo $field2['Field']['field_name']; ?>&nbsp;</td>
-						<td><?php echo $field2['Field']['field_type']; ?>&nbsp;</td>
+						<td><?php echo h($field['Field']['field_name']); ?>&nbsp;</td>
+						<td><?php echo h($field['Field']['entity_name']); ?>&nbsp;</td>
 						<td class="actions">
-						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $field2['Field']['_id']), array('class'=>'btn btn-primary')); ?>
-							<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete',$field2['Field']['_id'],$field2['Field']['entity_id']), array('class'=>'btn btn-danger'), __('Are you sure you want to delete # %s?', $field2['Field']['_id'])); ?>
+							<?php echo $this->Html->link(__('View'), array('action' => 'view', $field['Field']['_id']), array('class'=>'btn btn-info')); ?>
+							<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $field['Field']['_id']), array('class'=>'btn btn-primary')); ?>
+							<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $field['Field']['_id']), array('class'=>'btn btn-danger'), __('Are you sure you want to delete # %s?', $field['Field']['_id'])); ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

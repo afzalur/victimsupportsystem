@@ -25,8 +25,11 @@
 					<tr>
 						<td><?php echo h($entity['Entity']['entity_name']); ?>&nbsp;</td>
 						<td class="actions">
-							<?php echo $this->Html->link(__('Add Entry'), array('action' => 'addData', $entity['Entity']['_id']), array('class'=>'btn btn-info')); ?>
-							<?php echo $this->Html->link(__('Add Field'), array('controller'=>'fields','action' => 'add', $entity['Entity']['_id']), array('class'=>'btn btn-info')); ?>
+							<?php echo $this->Html->link(__('View Entries'), array('controller'=>'entities','action' => 'viewData', $entity['Entity']['_id']), array('class'=>'btn btn-info')); ?>
+							<?php echo $this->Html->link(__('Add Entry'), array('action' => 'addData', $entity['Entity']['_id']), array('class'=>'btn btn-success')); ?>
+							<?php echo $this->Html->link(__('Add Field'), array('controller'=>'fields','action' => 'add', $entity['Entity']['_id']), array('class'=>'btn btn-warning')); ?>
+						    <?php echo $this->Html->link(__('Excel Export'), array('controller'=>'entities','action' => 'viewExcel', $entity['Entity']['_id']), array('class'=>'btn btn-info')); ?>
+							<?php echo $this->Html->link(__('Import Excel'), array('controller'=>'entities','action' => 'import_excel', $entity['Entity']['_id']), array('class'=>'btn btn-warning')); ?>
 							<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $entity['Entity']['_id']), array('class'=>'btn btn-danger'), __('Are you sure you want to delete # %s?', $entity['Entity']['_id'])); ?>
 						</td>
 					</tr>

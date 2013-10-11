@@ -1,0 +1,4 @@
+ <?php
+    
+    $excel->generate($event);
+?> 

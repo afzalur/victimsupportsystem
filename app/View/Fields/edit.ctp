@@ -1,10 +1,11 @@
 <div class="groups form">
-<?php echo $this->Form->create('Entity'); ?>
+<?php echo $this->Form->create('Field'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Entity'); ?></legend>
+		<legend><?php echo __('Edit Field'); ?></legend>
 	<?php
 		echo $this->Form->input('_id',array('type'=>'hidden'));
-		echo $this->Form->input('entity_name');
+		echo $this->Form->input('field_name');
+		echo $this->Form->input('field_type',array('options' => $types));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

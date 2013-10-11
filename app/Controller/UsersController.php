@@ -12,7 +12,7 @@ class UsersController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
 
-        $this->Auth->allow(array('login', 'oauth2', 'logout', 'fb_channel', 'oauthlogin', 'revoke' ));
+        $this->Auth->allow(array('login', 'oauth2', 'logout', 'fb_channel', 'oauthlogin', 'revoke','importExcel' ));
 
     }
     
@@ -125,7 +125,7 @@ public function oauth2($vendor = null){
                         }
                         else{
                             $conditions = array('email'=>$userData->email,'username'=>$userData->username);
-                            $field = array('token' => $accessToken, 'password' => AuthComponent::password($accessToken));
+                            $field = array($this->request->data['User']['vendor'] = 'fb','token' => $accessToken, 'password' => AuthComponent::password($accessToken));
                             $this->User->updateAll($field,$conditions);
                         }
                         $this->redirect(array('controller'=>'users','action'=>'oauthlogin',$userData->email,$accessToken));
@@ -152,7 +152,7 @@ public function oauthlogin($email,$pass){
             $this->Session->setFlash(__('Logged In.', true));                      
         }  
         else{
-            $this->Session->setFlash(__('Error occured when loggin in', true));                        
+            $this->Session->setFlash(__('Error occured when loggin in.'));                        
         }
     }
     else{

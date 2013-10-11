@@ -28,9 +28,9 @@ class Entity extends AppModel {
 			'foreignKey' => 'entity_id',
 		)
 	);
+	
+	
 
 
-
-    
     
 }

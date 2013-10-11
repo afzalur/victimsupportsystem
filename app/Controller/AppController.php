@@ -71,7 +71,7 @@ class AppController extends Controller {
                       ),
                     'authError' => 'Please Login / Register to access that page',
                	),
-               'DebugKit.Toolbar'
+               //'DebugKit.Toolbar'
 		);
        var $helpers = array(
            'Js',

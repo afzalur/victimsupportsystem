@@ -27,10 +27,8 @@
 						<td><?php echo h($field['Field']['field_name']); ?>&nbsp;</td>
 						<td><?php echo h($field['Field']['entity_name']); ?>&nbsp;</td>
 						<td class="actions">
-						<a href="#" class='btn btn-info'>View </a>
-							<?php //echo $this->Html->link(__('View'), array('action' => 'view', $field['Field']['_id']), array('class'=>'btn btn-info')); ?>
-							<a href="#" class='btn btn-primary'>Edit </a>
-							<?php // echo $this->Html->link(__('Edit'), array('action' => 'edit', $field['Field']['_id']), array('class'=>'btn btn-primary')); ?>
+							<?php echo $this->Html->link(__('View'), array('action' => 'view', $field['Field']['_id']), array('class'=>'btn btn-info')); ?>
+							<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $field['Field']['_id']), array('class'=>'btn btn-primary')); ?>
 							<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $field['Field']['_id']), array('class'=>'btn btn-danger'), __('Are you sure you want to delete # %s?', $field['Field']['_id'])); ?>
 						</td>
 					</tr>

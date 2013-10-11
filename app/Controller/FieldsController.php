@@ -47,18 +47,32 @@ class FieldsController extends AppController {
 			$this->Session->setFlash(__('Select an Entity first to add field to it'),'notices/error');
 			$this->redirect(array('controller'=>'fields','action'=>'selectEntity'));
 		}
+		$types = array(
+				'varchar' => 'varchar',
+				'text' => 'Text', 
+				'number' => 'Numbers', 
+				'date' => 'Date', 
+				'file' => 'File',
+			);
+
 		if ($this->request->is('post')) {
 			$this->Field->create();
 			if ($this->Field->saveAll($this->request->data)) {
 				$this->Session->setFlash(__('The Field has been saved'));
-				$this->redirect(array('action' => 'index'));
+				//$this->redirect(array('action' => 'index'));
+				//$entityId = $this->post('entity_id');
+				$this->redirect(array('action' => 'add'.'/'.$entityId));
 			} else {
 				$this->Session->setFlash(__('The Field could not be saved. Please, try again.'));
 			}
 		}
 		$entity = $this->Entity->find('first',array('conditions'=>array($this->Entity->primaryKey => $entityId)));
 		$fields = $this->Field->find('list',array('conditions'=>array('entity_id' => $entityId)));
-		$this->set(compact('entity','fields'));
+		$fields2 = $this->Field->find('all',array('conditions'=>array('entity_id' => $entityId)));
+		//echo "<pre>";
+	   // print_r($fields2 );
+	
+		$this->set(compact('entity','fields','fields2','types'));
 	}
 
 
@@ -87,18 +101,25 @@ class FieldsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+	 
+	    $fields2 = $this->Field->find('first',array('conditions'=>array('_id' => $id)));
+		//echo "<pre>";
+		//print_r($fields2 );
+	    
 		if (!$this->Field->exists($id)) {
 			throw new NotFoundException(__('Invalid Field'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Field->save($this->request->data)) {
+			
 				$this->Session->setFlash(__('The Field has been saved'));
-				$this->redirect(array('action' => 'index'));
+				
+				$this->redirect(array('action' => 'add'.'/'.$fields2['Field']['entity_id']));
 			} else {
 				$this->Session->setFlash(__('The Field could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Field.' . $this->Field->primaryKey => $id));
+			$options = array('conditions' => array('Field.'.$this->Field->primaryKey=>$id));
 			$this->request->data = $this->Field->find('first', $options);
 		}
 	}
@@ -111,7 +132,7 @@ class FieldsController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null,$entity_id= null) {
 		$this->Field->id = $id;
 		if (!$this->Field->exists()) {
 			throw new NotFoundException(__('Invalid Field'));
@@ -119,7 +140,7 @@ class FieldsController extends AppController {
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Field->delete()) {
 			$this->Session->setFlash(__('Field deleted'));
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'add'.'/'.$entity_id));
 		}
 		$this->Session->setFlash(__('Field was not deleted'));
 		$this->redirect(array('action' => 'index'));
