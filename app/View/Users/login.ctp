@@ -5,7 +5,7 @@
 <script>
 function fblogin(){
 	FB.init({
-      appId      : '214690735348256',                        // App ID from the app dashboard
+      appId      : '1405875632965621',                        // App ID from the app dashboard
       status     : true,                                 // Check Facebook Login status
       xfbml      : true                                  // Look for social plugins on the page
   });
@@ -18,7 +18,7 @@ function fblogin(){
 
 function fbout(){
 	FB.init({		
-		appId      : '214690735348256',                        // App ID from the app dashboard
+		appId      : '1405875632965621',                        // App ID from the app dashboard
 		status     : true,                                 // Check Facebook Login status
 		xfbml      : true,  
 	});
@@ -74,8 +74,7 @@ function signinCallback(authResult) {
 
 	<a href="#" onClick="fblogin()"><img src="/img/facebook.png" style="float:left; margin-left:0px; width:96px; height:22px" title="facebook"/></a>
 
-
-	<a href="#" onClick="fbout()"><img src="/img/yahoo.png" style="float:left; margin-left:24px; width:80px; height:22px" title="yahoo"/></a>
+	
 
 
 	<span id="signinButton"
@@ -83,7 +82,7 @@ function signinCallback(authResult) {
 	  <span
 	    class="g-signin"
 	    data-callback="signinCallback"
-	    data-clientid="928543426576.apps.googleusercontent.com"
+	    data-clientid="984521141732.apps.googleusercontent.com"
 	    data-cookiepolicy="single_host_origin"
 	    data-requestvisibleactions="http://schemas.google.com/AddActivity"
 	    data-scope="https://www.googleapis.com/auth/userinfo.email">

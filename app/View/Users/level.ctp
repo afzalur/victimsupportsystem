@@ -3,7 +3,7 @@
 		<div class="widget-header">	      				
 			<h3>
 				<i class="icon-pencil"></i>
-				User Entry	      					
+				Level Selection	      					
 			</h3>	
 	</div> <!-- /widget-header -->
 	
@@ -11,32 +11,29 @@
 		
 				<?php   echo $this->Form->create('User',array('class'=>'form-horizontal')); ?>
 				<?php   $this->Form->victimDefaults(); ?>
-				<?php
-				//$this->Form->inputDefaults(array('error'=>array('attributes'=>array('class'=>'system negative'))));
-				?>
+				<?php	//$this->Form->inputDefaults(array('error'=>array('attributes'=>array('class'=>'system negative')))); ?>
 					<fieldset>
 					<?php
+						echo $this->Form->input('_id');
+						echo $this->Form->input('username');
 						echo $this->Form->input(
-							'user_type',
+							'user_level',
 							array(
 								'options' => 
 								array(
-									'Super Admin' => 'Super Admin',
-									'Admin' => 'Admin',
-									'General' => 'General'
+									'1' => 'Level - 1',
+									'2' => 'Level - 2',
+									'3' => 'Level - 3',
+									'4' => 'Level - 4'
 									)
 								)
 						);
-						echo $this->Form->input('email');
-						echo $this->Form->input('password');
-						echo $this->Form->input('retype_password',array('type'=>'password'));
-						echo $this->Form->hidden('user_level',array('value'=>'1'));
 					?>
 					</fieldset>
 					<fieldset>
 						<div class="control-group">
 		                    <div class="controls">
-		                        <?php   echo $this->Form->button('Create User',array('class'=>'btn btn-success input-xlarge')); ?>
+		                        <?php   echo $this->Form->button('Update Level',array('class'=>'btn btn-success input-xlarge')); ?>
 		                    </div>
 		                </div>
 					</fieldset>

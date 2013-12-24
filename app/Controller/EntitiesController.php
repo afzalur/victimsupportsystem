@@ -7,6 +7,8 @@ App::import('Vendor', 'php-excel-reader/excel_reader2'); //import statement
  * @property User $User
  */
 class EntitiesController extends AppController {
+   
+    public $components = array('Paginator');
     
     var $uses = array('Field','Entity');
 
@@ -22,11 +24,29 @@ class EntitiesController extends AppController {
  * @throws NotFoundException
  * @return void
  */
+ 
 	public function index() {
-	    $entities = $this->Entity->find('all');
-		$this->set(compact('entities'));
+/*	     
+		 echo "<pre>";
+	     print_r($this->Session->read('Auth.User'));		 
+		 echo $this->Session->read('Auth.User.user_level');
+*/		 
+		
+		$user_type = $this->Session->read('Auth.User.user_type');
+		$this->set('user_type', $user_type);
+		
+		$user_level= $this->Session->read('Auth.User.user_level');
+		$this->set('user_level', $user_level);
+		
+		
+		$this->paginate = array(
+			'limit' => 5, // this was the option which you forgot to mention
+			'order' => array(
+				'Entity.entity_name' => 'DESC')
+		);		
+				
+		$this->set('entities', $this->paginate('Entity'));
 	}
-
 	
 /**
  * view method
@@ -209,8 +229,9 @@ class EntitiesController extends AppController {
 		$db = $mongo->selectDB('victim');
 		$collection = $db->selectCollection($entity);
 		$data = $collection->find();
-
-		$this->set(compact('fields','entity','data','id'));
+		$cnt=$collection->count(); 
+        
+		$this->set(compact('fields','entity','id','data','cnt'));
 	}
 
 
@@ -350,10 +371,9 @@ public function viewExcel($id = null) {
 		$temp = $this->Entity->find('first',array('conditions'=>array($this->Entity->primaryKey => $id)));
 		$entity = $temp['Entity']['entity_name'];
 		
-	      $filename =$entity.'('.date('d-m-Y').')'.".xls";
-		 $contents = "Entity Name:\t";
+		$filename =$entity;
+		$contents ="";
 		
-		$contents.= $entity."\t\n";
 		
 		$mongo = new Mongo($this->mongoDbURI);
 		$db = $mongo->selectDB('victim');
@@ -381,14 +401,43 @@ public function viewExcel($id = null) {
 			$contents.= "\n"; 
 			endforeach; 
 
-		
 			
 			header('Content-Transfer-Encoding: UTF-16LE');
-			header("Content-type: application/vnd.ms-excel");
-			header('Content-Disposition: attachment; filename='.$filename);
-			header("Pragma: no-cache");
-			header("Expires: 0");
-			echo chr(255).chr(254).iconv("UTF-8", "UTF-16LE//IGNORE",$contents); 
+			//header("Content-type: application/vnd.ms-excel");
+	  //header("Pragma: public");
+      //header("Expires: 0");
+      header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+      header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+      header("Content-Type: application/force-download");
+      header("Content-Type: application/download");
+      header("Content-Disposition: attachment; filename=\"".$filename.".xls\"");
+	 	echo chr(255).chr(254).iconv("UTF-8", "UTF-16LE//IGNORE",$contents);
+      // Name the file to .xlsx to solve the excel/openoffice file opening problem
+     // header("Content-Disposition: attachment; filename=\"".$filename);
+			
+			//header('Content-Disposition: attachment; filename='.$filename);
+			//header("Pragma: no-cache");
+			//header("Expires: 0");
+			//echo chr(255).chr(254).iconv("UTF-8", "UTF-16LE//IGNORE",$contents); 
+			/*
+			header('Content-Transfer-Encoding: UTF-16LE');
+			//header("Content-type: application/vnd.ms-excel");
+	  header("Pragma: public");
+      header("Expires: 0");
+      header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+      header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+      header("Content-Type: application/force-download");
+      header("Content-Type: application/download");;
+      header("Content-Disposition: inline; filename=\"".$filename.".xls\"");
+      // Name the file to .xlsx to solve the excel/openoffice file opening problem
+     // header("Content-Disposition: attachment; filename=\"".$filename);
+			
+			//header('Content-Disposition: attachment; filename='.$filename);
+			//header("Pragma: no-cache");
+			//header("Expires: 0");
+			echo chr(255).chr(254).iconv("UTF-8", "UTF-16LE//IGNORE",$contents); */
+			
+			
 	
 		 }
 	

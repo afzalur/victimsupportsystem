@@ -7,13 +7,13 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-    var $uses = array('User');
+    public $components = array('Paginator');	
+	var $uses = array('User','Field','Entity');	
+	private $mongoDbURI = 'mongodb://202.51.191.27:27017';	
     
     public function beforeFilter() {
         parent::beforeFilter();
-
-        $this->Auth->allow(array('login', 'oauth2', 'logout', 'fb_channel', 'oauthlogin', 'revoke','importExcel' ));
-
+        $this->Auth->allow(array('login', 'oauth2', 'logout', 'fb_channel', 'oauthlogin', 'revoke','importExcel', 'result', 'search'));
     }
     
 /**
@@ -22,13 +22,86 @@ class UsersController extends AppController {
  * @throws NotFoundException
  * @return void
  */
+
 	public function index($type = null) {    
+		/* echo "<pre>";
+	    print_r($this->Session->read('Auth.User'));
+		*/
+		
+		if($this->Session->read('Auth.User.user_type') == 'General'){
+			 $this->redirect(array('controller'=>'users','action'=>'general'));
+		}
+		 
         $options = (!empty($type)) ? array('conditions' => array('user_type' => $type)) : null;
         $users = $this->User->find( 'all', $options );
         $this->set(compact('users','options'));
-	}    
-
-        
+		
+		$this->paginate = array(
+			'limit' => 5, // this was the option which you forgot to mention
+			'order' => array('User.user_type' => 'DESC')
+		    );		
+				
+		$this->set('users', $this->paginate('User'));
+	}	
+	
+	public function general($type = null) { 
+        //$options = (!empty($type)) ? array('conditions' => array('user_type' => $type)) : null;
+		$id=$this->Session->read('Auth.User._id');
+		// $conditions=array('conditions' => array('_id'=>$id))
+		$options=array('conditions' => array('_id'=>$id));
+        $users = $this->User->find('all', $options);
+        $this->set(compact('users','options'));
+		
+		$this->paginate = array(
+			'limit' => 5, 
+			'order' => array('User.user_type' => 'DESC'),
+			'conditions'=> array('User._id'=>$id)
+		    );		
+				
+		$this->set('users', $this->paginate('User'));
+	} 	
+	
+	
+	public function search()
+	{
+	
+	}
+	
+	public function result() { 
+		if (!empty($this->data)) {				
+			$string = $this->data['User']['username'];		
+			$search_result = $this->User->find('all', array(
+				'conditions' => array( 
+					'User.username' => new MongoRegex("/$string/")
+				)
+			));		
+			
+			$search_entity = $this->Entity->find('all', array(
+				'conditions' => array( 
+					'Entity.entity_name' => new MongoRegex("/$string/")
+				)
+			));		
+			
+			$this->set('search_result', $search_result);
+			$this->set('search_entity', $search_entity);
+		}
+		
+		else {
+			$this->redirect(array('controller'=>'users','action' => 'index'));
+		}
+	} 
+/* from Uvws 	
+	public function result() { 
+		if(!empty($this->data)) { 					   
+				$data = $this->User->find('all',array('conditions'=>array('User.id'=> $this->data['User']['id']))); 
+				$this->set('result', $data); 
+		} 
+		else { 
+				$this->redirect(array('controller'=>'uvw','action'=>'search')); 
+		} 
+	} 	
+*/	
+     
 /**
  * login method
  * 
@@ -47,7 +120,6 @@ public function login($vendor = null) {
         $this->redirect(array('controller'=>'users','action'=>'index'));
     }
 }
-
 
 
 public function oauth2($vendor = null){
@@ -262,6 +334,33 @@ public function oauthlogin($email,$pass){
                 $this->redirect($this->Auth->redirect());
             }
         }
+		
+
+
+        function level($id = null){
+            if($this->Auth->user('user_type') == 'Super Admin'){
+                if (!$this->User->exists($id)) {
+                        throw new NotFoundException(__('Invalid user'));
+                }
+                if ($this->request->is('post') || $this->request->is('put')) {
+                        if ($this->User->save($this->request->data)) {
+                                $this->Session->setFlash(__('The user has been saved'));
+                                $this->redirect(array('action' => 'index'));
+                        } else {
+                                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+                        }
+                } else {
+                        $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+                        $this->request->data = $this->User->find('first', $options);
+                }
+                $groups = $this->User->Group->find('list',array('fields'=>array('Group.id','Group.group_name')));
+                $this->set(compact('groups'));
+            }
+            else{
+                $this->Session->setFlash(__('You are not authorized to view that page', true));
+                $this->redirect($this->Auth->redirect());
+            }
+        }		
         
 
 /**

@@ -96,10 +96,10 @@
 </div> <!-- /account-container -->
 
 
-<!-- Text Under Box -->
+<!-- Text Under Box 
 <div class="login-extra">
 	Forgot password? <a href="#">Click here</a>
-</div> <!-- /login-extra -->
+</div>--> <!-- /login-extra -->
 
 <?php echo $this->element('sql_dump'); ?>
 </body>

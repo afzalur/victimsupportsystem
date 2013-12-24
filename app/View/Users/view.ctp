@@ -41,14 +41,35 @@
 
 
 <?php $this->start('sidebar'); ?>
+
+
+<?php if($this->Session->read('Auth.User.user_type') == 'Super Admin'){?>
+
 <div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+	<h3><?php echo __('Actions'); ?></h3>	
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['_id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('Chgange Password'), array('action' => 'change_password', $user['User']['_id'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete User'), array('action' => 'delete', $user['User']['_id']), null, __('Are you sure you want to delete # %s?', $user['User']['_id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('action' => 'atd')); ?> </li>
-	</ul>
+	</ul>	
 </div>
+
+<?php }elseif($this->Session->read('Auth.User.user_type') == 'Admin'){?>
+
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>	
+	<ul>
+		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['_id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Chgange Password'), array('action' => 'change_password', $user['User']['_id'])); ?> </li>		
+		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New User'), array('action' => 'atd')); ?> </li>
+	</ul>	
+</div>
+
+<?php }else{} ?>
+
+
+
 <?php $this->end(); ?>

@@ -99,23 +99,16 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 				
 				<div class="info-avatar">
 					
-					<img src="./img/avatar.jpg" alt="avatar">
+					<img src="<?php echo $this->base;?>/img/avatar.jpg" alt="avatar">
 					
-				</div> <!-- /.info-avatar -->
-				
-			</div> <!-- /#info-menu -->
-			
-		</div> <!-- /#info -->
-		
+				</div> <!-- /.info-avatar -->				
+			</div> <!-- /#info-menu -->			
+		</div> <!-- /#info -->		
 	</div> <!-- /.container -->
-
 </div> <!-- /#header -->
 
-
-<div id="nav">
-		
-	<div class="container">
-		
+<div id="nav">		
+	<div class="container">		
 		<a href="javascript:;" class="btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
         	<i class="icon-reorder"></i>
       	</a>
@@ -137,11 +130,23 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						User Management
 						<b class="caret"></b>
 					</a>	
-				
+				<?php if($this->Session->read('Auth.User.user_type')=='Super Admin'){?>
 					<ul class="dropdown-menu">
 						<li><?php echo $this->Html->link('Super Admin', array('controller' => 'users', 'action' => 'index', 'Super Admin')); ?></li>
 						<li><?php echo $this->Html->link('Admin', array('controller' => 'users', 'action' => 'index', 'Admin')); ?></li>
-						</ul>    				
+						<li><?php echo $this->Html->link('Users', array('controller' => 'users', 'action' => 'index')); ?></li>					  
+					</ul> 
+				<?php } elseif($this->Session->read('Auth.User.user_type')=='Admin'){?>
+					<ul class="dropdown-menu">						
+						<li><?php echo $this->Html->link('Admin', array('controller' => 'users', 'action' => 'index', 'Admin')); ?></li>
+						<li><?php echo $this->Html->link('Users', array('controller' => 'users', 'action' => 'index')); ?></li>					  
+					</ul> 
+				<?php }	else{?>
+					<ul class="dropdown-menu">												
+						<li><?php echo $this->Html->link('Users', array('controller' => 'users', 'action' => 'general')); ?></li>					  
+					</ul> 
+				<?php } ?>
+				
 				</li>
 				
 				<li class="dropdown">					
@@ -157,7 +162,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<li><?php echo $this->Html->link('Add Field to an Entity', array('controller' => 'fields', 'action' => 'selectEntity')); ?></li>
 					</ul> 
 				</li>
-				
+				<!--
 				<li class="dropdown">					
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="icon-copy"></i>
@@ -179,51 +184,42 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<b class="caret"></b>
 					</a>										
 				</li>	
-			
-			</ul>
-			
+				-->			
+			</ul>			
 			
 			<ul class="nav pull-right">
 		
 				<li class="">
-					<form class="navbar-search pull-left">
-						<input type="text" class="search-query" placeholder="Search">
-						<button class="search-btn"><i class="icon-search"></i></button>
-					</form>	    				
-				</li>
-				
-			</ul>
-			
-		</div> <!-- /.nav-collapse -->
-		
-	</div> <!-- /.container -->
-	
+					<?php echo $this->Form->create('User',array('controller'=>'users','action' => 'result'));
+					?>
+						<!--<input type="text" class="search-query" id="UserUsername" placeholder="Search" name="data[User][username]">
+						<!--<button class="search-btn"><i class="icon-search"></i></button>-->
+						<?php   echo $this->Form->input('username',array('label'=>'','class'=>'search-query','style'=>'margin-right:50px; width:150px'));
+								echo "<span style='float:right; margin-top:-35px'>";
+	                            echo $this->Form->end('Go',array('style'=>'float:right; margin-top:-35px'));		
+								echo "</span>";
+						?>		
+				</li>				
+			</ul>			
+		</div> <!-- /.nav-collapse -->		
+	</div> <!-- /.container -->	
 </div> <!-- /#nav -->
 
-
-<div id="content">
-		
+<div id="content">		
 	<div class="container">
-		
+		<!--
 		<div id="page-title" class="clearfix">
 			
 			<ul class="breadcrumb">
 			  <li>
-			    <a href="/">Home</a> <span class="divider">/</span>
+			   <?php echo $this->Html->getCrumbs(' > ', 'Home');?>
 			  </li>
-			  <li>
-			    <a href="#">Components</a> <span class="divider">/</span>
-			  </li>
-			  <li class="active">Table Styles</li>
+			
 			</ul>
 			
-		</div> <!-- /.page-title -->
-	
-		
+		</div> --><!-- /.page-title -->		
 		
 		<div class="row">
-			
-			
 		
 			<div class="span8">
 				<?php echo $this->Session->flash(); ?>
@@ -236,49 +232,16 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
             		</div>
         		</div>
             </div>
-
-
-		    	
-		    	
 		    
 		</div>  <!-- /.row -->  
-
-		
-		
-	</div> <!-- /.container -->
-	
+	</div> <!-- /.container -->	
 </div> <!-- /#content -->
 
-
-
-<div id="footer">	
-		
-	<div class="container">
-		
-		&copy; 2012 Propel UI, all rights reserved.
-		
-	</div> <!-- /.container -->		
-	
+<div id="footer">			
+	<div class="container">&copy; 2013 Victim Management, All rights reserved.		
+	</div> <!-- /.container -->			
 </div> <!-- /#footer -->
-
-
-
 
 </body>
 	<?php //echo $this->element('sql_dump'); ?>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
- 	
-  	
-
