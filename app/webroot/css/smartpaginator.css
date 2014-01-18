@@ -1,0 +1,151 @@
+﻿.pager
+{
+    width: 900px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    padding-top: 10px;
+    padding-left: 10px; /*border-radius: 8px; 	-moz-border-radius: 8px;*/
+}
+.pager div.short
+{
+    float: right;
+    margin: 0;
+    padding: 0;
+    margin-right: 10px;
+    width: 74px;
+	display:none;
+}
+.pager div.short input
+{
+  width: 13px;
+height: 20px;
+border: medium none;
+margin-left: 2px;
+float: left;
+display:none;
+}
+.pager ul
+{
+    list-style: none;
+    padding: 0;    
+    float: left;
+    margin: 0 7px 0 -15px;	width:500px;
+}
+.pager ul li
+{
+    display: inline;
+    margin-left: 2px;
+}
+.pager ul li a
+{
+    text-decoration: none;
+    display: inline-table;
+    width: 15px;
+    height: 20px;
+    text-align: center;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.pager span
+{
+    margin-left: 4px;
+    color: White;
+    float: left;
+}
+.pager .btn
+{
+    display: block;
+	color:#000;
+    width: 40px;
+    text-align: center;
+    float: left;
+    padding: 0;
+    margin: 0;
+    margin-left: 4px;
+    cursor: pointer;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.pager .disabled
+{
+    color: #A0A0A0 !important;
+    text-shadow: 1px 1px 1px #FFFFFF;
+}
+/*green*/.green
+{
+    background-color: #666;
+	color:#000;
+	width:auto;
+}
+.green.normal
+{
+    background-color: #ccc;
+    color:#000;
+    border: solid 1px #666;
+}
+.green.active
+{
+    background-color: #344C00;
+    color: #F8EB00;
+    border: solid 1px #5f9000;
+}
+.pager.green .btn
+{
+    background-color: #ccc;
+    color:#000;
+    border: solid 1px #fff;
+	width:auto;
+}
+/*black*/.black
+{
+    background-color: #202020;
+}
+.black.normal
+{
+    background-color: #1d1d1d;
+    color: #B0D551;
+    border: solid 1px #000;
+}
+.black.active
+{
+    background-color: #333333;
+    color: White;
+    border: solid 1px #000;
+}
+.pager.black .btn
+{
+    background-color: #1d1d1d;
+    color: White;
+    border: solid 1px #000;
+}
+/*red*/.red
+{
+    background-color: #D50B07;
+}
+.red.normal
+{
+    background-color: #E71C18;
+    color: White;
+    border: solid 1px #F82723;
+}
+.red.active
+{
+    background-color: #C00D09;
+    color: White;
+    border: solid 1px #A90B08;
+}
+.pager.red .btn
+{
+    background-color: #E71C18;
+    color: White;
+    border: solid 1px #F82723;
+}
